@@ -141,6 +141,7 @@ CREATE TABLE Screen (
   `item_id` INT NOT NULL REFERENCES Item(`item_id`),
   `screen_res` INT NOT NULL REFERENCES Kw_Screen_Res(`keyword_id`),
   `screen_model` INT REFERENCES Kw_Screen_Model(`keyword_id`),
+  `screen_type` INT REFERENCES Kw_Screen_Type(`keyword_id`),
   `screen_brand` INT REFERENCES Kw_Screen_Brand(`keyword_id`),
   `screen_size` INT REFERENCES Kw_Screen_Size(`keyword_id`)
 );
@@ -174,6 +175,10 @@ CREATE TABLE Kw_Screen_Res (
 );
 
 CREATE TABLE Kw_Screen_Model (
+  `keyword_id` INT PRIMARY KEY REFERENCES Keyword(`keyword_id`)
+);
+
+CREATE TABLE Kw_Screen_Type (
   `keyword_id` INT PRIMARY KEY REFERENCES Keyword(`keyword_id`)
 );
 
