@@ -1,3 +1,6 @@
+/* 336 Project Relational Schema
+  Cullin Poresky, Ethan Murad, Urvish Patel */
+
 CREATE DATABASE AuctionSite;
 USE AuctionSite;
 
