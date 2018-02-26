@@ -72,7 +72,7 @@ CREATE TABLE Help_Category (
 
 CREATE TABLE Help_Ticket (
   `ticket_id` INT PRIMARY KEY AUTO_INCREMENT,
-  `status` ENUM('unassigned', 'assigned', 'completed') NOT NULL,
+  `status` ENUM('unassigned', 'assigned', 'resolved_closed', 'inactive_closed') NOT NULL,
   `title` VARCHAR(100),
   `content` TEXT NOT NULL,
   `category` VARCHAR(30) NOT NULL REFERENCES Help_Category(`category`),
