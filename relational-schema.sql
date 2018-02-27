@@ -23,7 +23,7 @@ CREATE TABLE Email (
   `content` TEXT,
   `timestamp` DATETIME NOT NULL,
   `from` VARCHAR(60) NOT NULL REFERENCES User(`email_address`),
-  `to` VARCHAR(60) NOT NULL REFERENCES User(`email_address`) --primary recipient
+  `to` VARCHAR(60) NOT NULL REFERENCES User(`email_address`) -- primary recipient
 );
 
 CREATE TABLE Email_To ( -- all recipients 
