@@ -51,7 +51,7 @@ CREATE TABLE End_User (
 
 CREATE TABLE Alert (
   `alert_id` INT PRIMARY KEY AUTO_INCREMENT,
-  `alert_for` INT NOT NULL REFERENCES User(`uuid`)
+  `alert_for` INT NOT NULL REFERENCES User(`uuid`),
   `active` BOOLEAN NOT NULL
 );
 
