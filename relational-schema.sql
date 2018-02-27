@@ -34,7 +34,7 @@ CREATE TABLE Email_To ( -- all recipients
 CREATE TABLE Email_Attachment (
   `attachment_id` INT PRIMARY KEY AUTO_INCREMENT,
   `email_id` INT NOT NULL REFERENCES Email(email_id),
-  `attachment` NOT NULL BLOB
+  `attachment` BLOB NOT NULL
 );
 
 CREATE TABLE Token (
@@ -88,7 +88,7 @@ CREATE TABLE Help_Ticket (
 CREATE TABLE Ticket_Attachment (
   `attachment_id` INT PRIMARY KEY AUTO_INCREMENT,
   `ticket_id` INT NOT NULL REFERENCES Help_Ticket(ticket_id),
-  `attachment` NOT NULL BLOB
+  `attachment` BLOB NOT NULL
 );
 
 CREATE TABLE Bid (
