@@ -1,18 +1,72 @@
 /* 336 Project Relational Schema
   Cullin Poresky, Ethan Murad, Urvish Patel */
 
-CREATE DATABASE AuctionSite;
+CREATE DATABASE IF NOT EXISTS AuctionSite;
 USE AuctionSite;
 
-CREATE TABLE User (
-  `uuid` INT PRIMARY KEY AUTO_INCREMENT,
-  `username` VARCHAR(30) NOT NULL,
-  `email_address` VARCHAR(60) NOT NULL,
+DROP TABLE IF EXISTS `User`;
+DROP TABLE IF EXISTS Authentication;
+DROP TABLE IF EXISTS Email;
+DROP TABLE IF EXISTS Email_To;
+DROP TABLE IF EXISTS Email_Attachment;
+DROP TABLE IF EXISTS Token;
+DROP TABLE IF EXISTS End_User;
+DROP TABLE IF EXISTS Alert;
+DROP TABLE IF EXISTS Alert_Keyword;
+DROP TABLE IF EXISTS Customer_Rep;
+DROP TABLE IF EXISTS `Admin`;
+DROP TABLE IF EXISTS Help_Category;
+DROP TABLE IF EXISTS Help_Ticket;
+DROP TABLE IF EXISTS Ticket_Attachment;
+DROP TABLE IF EXISTS Bid;
+DROP TABLE IF EXISTS Auction;
+DROP TABLE IF EXISTS Item;
+DROP TABLE IF EXISTS Gpu;
+DROP TABLE IF EXISTS Screen;
+DROP TABLE IF EXISTS Cpu;
+DROP TABLE IF EXISTS Ram;
+DROP TABLE IF EXISTS Keyword;
+DROP TABLE IF EXISTS Kw_Screen_Res;
+DROP TABLE IF EXISTS Kw_Screen_Model;
+DROP TABLE IF EXISTS Kw_Screen_Type;
+DROP TABLE IF EXISTS Kw_Screen_Size;
+DROP TABLE IF EXISTS Kw_Screen_Brand;
+DROP TABLE IF EXISTS Kw_Cpu_Brand;
+DROP TABLE IF EXISTS Kw_Cpu_Size;
+DROP TABLE IF EXISTS Kw_Cpu_Model;
+DROP TABLE IF EXISTS Kw_Cpu_Vram_Type;
+DROP TABLE IF EXISTS Kw_Cpu_Core_Count;
+DROP TABLE IF EXISTS Kw_Cpu_Clock_Speed;
+DROP TABLE IF EXISTS Kw_Gpu_Brand;
+DROP TABLE IF EXISTS Kw_Gpu_Model;
+DROP TABLE IF EXISTS Kw_Gpu_Vram_Type;
+DROP TABLE IF EXISTS Kw_Gpu_Vram_Amount;
+DROP TABLE IF EXISTS Kw_Ram_Clock_Speed;
+DROP TABLE IF EXISTS Kw_Ram_Size;
+DROP TABLE IF EXISTS Kw_Ram_Type;
+DROP TABLE IF EXISTS Kw_Hdd_Size;
+DROP TABLE IF EXISTS Kw_Hdd_Speed;
+DROP TABLE IF EXISTS Kw_Battery_Life;
+DROP TABLE IF EXISTS Kw_Ssd_Size;
+DROP TABLE IF EXISTS Kw_Item_Model;
+DROP TABLE IF EXISTS Kw_Item_Mfr;
+DROP TABLE IF EXISTS Kw_Item_Length;
+DROP TABLE IF EXISTS Kw_Item_Width;
+DROP TABLE IF EXISTS Kw_Item_Height;
+DROP TABLE IF EXISTS Kw_Item_Weight;
+
+
+
+
+CREATE TABLE `User` (
+  `uuid` BINARY(16) PRIMARY KEY,
+  `username` VARCHAR(30) UNIQUE NOT NULL,
+  `email_address` VARCHAR(60) UNIQUE NOT NULL,
   `push` BOOLEAN NOT NULL
 );
 
 CREATE TABLE Authentication (
-  `uuid` INT PRIMARY KEY REFERENCES USER(uuid),
+  `uuid` BINARY(16) PRIMARY KEY REFERENCES `User`(uuid),
   `pass_hash` INT NOT NULL,
   `salt` VARCHAR(10) NOT NULL
 );
@@ -22,13 +76,13 @@ CREATE TABLE Email (
   `subject` VARCHAR(100),
   `content` TEXT,
   `timestamp` DATETIME NOT NULL,
-  `from` VARCHAR(60) NOT NULL REFERENCES User(`email_address`),
-  `to` VARCHAR(60) NOT NULL REFERENCES User(`email_address`) -- primary recipient
+  `from` VARCHAR(60) NOT NULL REFERENCES `User`(`email_address`),
+  `to` VARCHAR(60) NOT NULL REFERENCES `User`(`email_address`) -- primary recipient
 );
 
 CREATE TABLE Email_To ( -- all recipients 
   `email_id` INT PRIMARY KEY REFERENCES Email(`email_id`),
-  `to` VARCHAR(60) NOT NULL REFERENCES User(`email_address`)
+  `to` VARCHAR(60) NOT NULL REFERENCES `User`(`email_address`)
 );
 
 CREATE TABLE Email_Attachment (
@@ -40,18 +94,18 @@ CREATE TABLE Email_Attachment (
 CREATE TABLE Token (
   `token_id` INT PRIMARY KEY,
   `expiry` DATETIME NOT NULL,
-  `user` INT NOT NULL REFERENCES User(`uuid`)
+  `user` BINARY(16) NOT NULL REFERENCES `User`(`uuid`)
 );
 
 CREATE TABLE End_User (
-  `uuid` INT PRIMARY KEY REFERENCES User(`uuid`),
+  `uuid` BINARY(16) PRIMARY KEY REFERENCES `User`(`uuid`),
   `num_sold` INT DEFAULT 0,
   `num_bought` INT DEFAULT 0
 );
 
 CREATE TABLE Alert (
   `alert_id` INT PRIMARY KEY AUTO_INCREMENT,
-  `alert_for` INT NOT NULL REFERENCES User(`uuid`),
+  `alert_for` BINARY(16) NOT NULL REFERENCES `User`(`uuid`),
   `active` BOOLEAN NOT NULL
 );
 
@@ -62,11 +116,11 @@ CREATE TABLE Alert_Keyword (
 );
 
 CREATE TABLE Customer_Rep (
-   `uuid` INT PRIMARY KEY REFERENCES User(`uuid`)
+   `uuid` BINARY(16) PRIMARY KEY REFERENCES `User`(`uuid`)
 );
 
-CREATE TABLE Admin (
-  `uuid` INT PRIMARY KEY REFERENCES User(`uuid`)
+CREATE TABLE `Admin` (
+  `uuid` BINARY(16) PRIMARY KEY REFERENCES `User`(`uuid`)
 );
 
 CREATE TABLE Help_Category (
@@ -81,8 +135,8 @@ CREATE TABLE Help_Ticket (
   `category` VARCHAR(30) NOT NULL REFERENCES Help_Category(`category`),
   `created` DATETIME NOT NULL,
   `last_updated` DATETIME NOT NULL,
-  `submitted_by` INT NOT NULL REFERENCES End_User(`uuid`),
-  `assigned_to` INT REFERENCES CR(`uuid`)
+  `submitted_by` BINARY(16) NOT NULL REFERENCES End_User(`uuid`),
+  `assigned_to` BINARY(16) REFERENCES Customer_Rep(`uuid`)
 );
 
 CREATE TABLE Ticket_Attachment (
@@ -95,7 +149,7 @@ CREATE TABLE Bid (
   `bid_id` INT PRIMARY KEY AUTO_INCREMENT,
   `timestamp` DATETIME NOT NULL,
   `amount` INT NOT NULL,
-  `user` INT NOT NULL REFERENCES User(`uuid`),
+  `user` BINARY(16) NOT NULL REFERENCES `User`(`uuid`),
   `auction` INT NOT NULL REFERENCES Auction(`auction_id`)
 );
 
@@ -109,11 +163,11 @@ CREATE TABLE Auction (
   `start_price` INT NOT NULL,
   `title` VARCHAR(100) NOT NULL,
   `picture` BLOB,
-  `seller` INT NOT NULL REFERENCES End_User(`uuid`),
+  `seller` BINARY(16) NOT NULL REFERENCES End_User(`uuid`),
   `item_id` INT NOT NULL REFERENCES Item(`item_id`),
   `top_bid_id` INT REFERENCES Bid(`bid_id`),
   `finished` BOOLEAN NOT NULL,
-  `buyer` INT REFERENCES End_User(`uuid`)
+  `buyer` BINARY(16) REFERENCES End_User(`uuid`)
 );
 
 CREATE TABLE Item (
