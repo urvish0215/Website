@@ -15,11 +15,11 @@
       //initialize connection
       ApplicationDB db = new ApplicationDB();
       Connection con = db.getConnection();
+      Boolean success = false;
 
       //get form data
       String email = request.getParameter("email");
       String rawpass = request.getParameter("password");
-      System.out.println("Email " + email + " Password " + rawpass);
       
       String hashs = "SELECT salt, pass_hash FROM User INNER JOIN Authentication on User.uuid = Authentication.uuid WHERE User.email_address = ?";
       PreparedStatement hashps = con.prepareStatement(hashs);
@@ -34,6 +34,7 @@
           String storedHash = hashrs.getString(2);
           if (encoded.equals(storedHash)) {
         	  out.print("Logged in successfully.");
+        	  success = true;
           } else {
         	  out.print("Incorrect email or password.");
           }
@@ -42,8 +43,16 @@
       }
       
       con.close();
+      if (success) {
+      	response.setHeader("Refresh", "3;url=index.jsp");
+      } else {
+        response.setHeader("Refresh", "3;url=login.jsp");
+      }
       
-    } catch (Exception e) { }
+    } catch (Exception e) {
+		out.print("An error has occured. Please try again.");
+	    response.setHeader("Refresh", "3;url=login.jsp");
+    }
   %>
 
 </body>

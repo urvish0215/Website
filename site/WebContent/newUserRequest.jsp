@@ -15,6 +15,7 @@
       //initialize connection
       ApplicationDB db = new ApplicationDB();
       Connection con = db.getConnection();
+      Boolean success = false;
 
       //get form data, salt, and uuid
       String username = request.getParameter("username");
@@ -44,9 +45,17 @@
       
       ers.first();
       
+      //check if a user already exists with the given username
+      String checkNameExists = "SELECT COUNT(*) FROM User WHERE username = ?";
+      PreparedStatement nps = con.prepareStatement(checkEmailExists);
+      nps.setString(1, username);
+      ResultSet nrs = nps.executeQuery();
+      
+      nrs.first();
+      
       
       //if not, create a new user
-      if (ers.getInt(1) == 0) {
+      if (ers.getInt(1) == 0 && nrs.getInt(1) == 0) {
 
         String insertUsers = "INSERT INTO User (uuid, username, email_address, push) VALUES (?, ?, ?, ?)";
         String insertAuth = "INSERT INTO Authentication (uuid, salt, pass_hash) VALUES (?, ?, ?)";
@@ -70,15 +79,24 @@
         aps.executeUpdate();
 
         out.print("Account created successfully");
+        success = true;
 
-      } else {
+      } else if (ers.getInt(1) == 1){
 
         out.print("An account with that email already exists!");
 
+      } else if (nrs.getInt(1) == 1) {
+    	  out.print("That username is taken");
       }
       con.close();
+      if (success) {
+          response.setHeader("Refresh", "3;url=login.jsp");
+      } else {
+          response.setHeader("Refresh", "3;url=signup.jsp"); 
+      }
     } catch (Exception e) {
-    	out.print(e);
+    	out.print("An error has occured. Please try again.");
+        response.setHeader("Refresh", "3;url=signup.jsp");
     }
   %>
 
