@@ -5,7 +5,7 @@
 <title>Auction Site - Login</title>
 </head>
 <body>
-	Signup
+	Sign up
 	<br>
 		<form method="post" action="newUserRequest.jsp">
 			<table>
@@ -19,9 +19,6 @@
 	<br>
 	Already have an account?
 	<br>
-		<form method="get" action="login.jsp">
-			<br>
-			<input type="submit" value="login">
-		</form>
+	<a href="login.jsp">Log in</a>
 </body>
 </html>

@@ -9,7 +9,7 @@
 <title>Login Page</title>
 </head>
 <body>
-Login
+Log in
 <br>
 	<form method="post" action="loginRequest.jsp">
 	<table>
@@ -26,9 +26,6 @@ Login
 <br>
 Don't have an account?
 <br>
-	<form method="get" action="signup.jsp">
-	<br>
-	<input type="submit" value="signup">
-	</form>
+<a href="signup.jsp">Sign up</a>
 </body>
 </html>
