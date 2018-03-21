@@ -62,13 +62,13 @@ CREATE TABLE `User` (
   `uuid` BINARY(16) PRIMARY KEY,
   `username` VARCHAR(30) UNIQUE NOT NULL,
   `email_address` VARCHAR(60) UNIQUE NOT NULL,
-  `push` BOOLEAN NOT NULL
+  `push` BOOLEAN NOT NULL DEFAULT 1
 );
 
 CREATE TABLE Authentication (
   `uuid` BINARY(16) PRIMARY KEY REFERENCES `User`(uuid),
-  `pass_hash` INT NOT NULL,
-  `salt` VARCHAR(10) NOT NULL
+  `pass_hash` VARCHAR(50) NOT NULL,
+  `salt` VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Email (

@@ -22,6 +22,7 @@
       String rawpass = request.getParameter("password");
       UUID uuid = UUID.randomUUID();
       String salt = UUID.randomUUID().toString();
+      System.out.println("Username: " + username + ", email: " + email + ", rawpass: " + rawpass);
 
       //convert uuid to binary representation
       byte[] uuidBytes = new byte[16];
@@ -34,6 +35,7 @@
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest((rawpass.concat(salt)).getBytes(StandardCharsets.UTF_8));
       String encoded = Base64.getEncoder().encodeToString(hash);
+      
 
       //check if a user already exists with the given email
       String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ?";
@@ -43,11 +45,12 @@
       
       ers.first();
       
+      
       //if not, create a new user
       if (ers.getInt(1) == 0) {
 
-        String insertUsers = "INSERT INTO User uuid = ?, username = ?, email_address = ?, push = ?";
-        String insertAuth = "INSERT INTO Authentication uuid = ?, salt = ?, hash = ?";
+        String insertUsers = "INSERT INTO User VALUES (uuid = ?, username = ?, email_address = ?, push = ?);";
+        String insertAuth = "INSERT INTO Authentication VALUES (uuid = ?, salt = ?, pass_hash = ?);";
 
         PreparedStatement ups = con.prepareStatement(insertUsers);
         PreparedStatement aps = con.prepareStatement(insertAuth);
@@ -60,6 +63,9 @@
         aps.setBytes(1, uuidBytes);
         aps.setString(2, salt);
         aps.setString(3, encoded);
+        
+        System.out.println(ups.toString());
+        System.out.println(aps.toString());
 
         ups.executeUpdate();
         aps.executeUpdate();
@@ -72,7 +78,9 @@
 
       }
       con.close();
-    } catch (Exception e) { }
+    } catch (Exception e) {
+    	out.print(e);
+    }
   %>
 
 </body>
