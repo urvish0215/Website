@@ -38,17 +38,16 @@
       
 
       //check if a user already exists with the given email
-      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ? OR username = ?";
+      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ?";
       PreparedStatement eps = con.prepareStatement(checkEmailExists);
       eps.setString(1, email);
-      eps.setString(2, username);
       ResultSet ers = eps.executeQuery();
       
       ers.first();
       
       //check if a user already exists with the given username
       String checkNameExists = "SELECT COUNT(*) FROM User WHERE username = ?";
-      PreparedStatement nps = con.prepareStatement(checkEmailExists);
+      PreparedStatement nps = con.prepareStatement(checkNameExists);
       nps.setString(1, username);
       ResultSet nrs = nps.executeQuery();
       
@@ -91,13 +90,15 @@
       }
       con.close();
       if (success) {
-          response.setHeader("Refresh", "3;url=login.jsp");
+          response.setHeader("Refresh", "7;url=login.jsp");
       } else {
-          response.setHeader("Refresh", "3;url=signup.jsp"); 
+          response.setHeader("Refresh", "7;url=signup.jsp"); 
       }
-    } catch (Exception e) {
+    } 
+  	catch (Exception e) {
+    	System.out.println(e);
     	out.print("An error has occured. Please try again.");
-        response.setHeader("Refresh", "3;url=signup.jsp");
+        response.setHeader("Refresh", "7;url=signup.jsp");
     }
   %>
 

@@ -44,14 +44,14 @@
       
       con.close();
       if (success) {
-      	response.setHeader("Refresh", "3;url=index.jsp");
+      	response.setHeader("Refresh", "7;url=index.jsp");
       } else {
-        response.setHeader("Refresh", "3;url=login.jsp");
+        response.setHeader("Refresh", "7;url=login.jsp");
       }
       
     } catch (Exception e) {
 		out.print("An error has occured. Please try again.");
-	    response.setHeader("Refresh", "3;url=login.jsp");
+	    response.setHeader("Refresh", "7;url=login.jsp");
     }
   %>
 
