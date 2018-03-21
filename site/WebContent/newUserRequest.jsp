@@ -22,7 +22,6 @@
       String rawpass = request.getParameter("password");
       UUID uuid = UUID.randomUUID();
       String salt = UUID.randomUUID().toString();
-      System.out.println("Username: " + username + ", email: " + email + ", rawpass: " + rawpass);
 
       //convert uuid to binary representation
       byte[] uuidBytes = new byte[16];
@@ -49,8 +48,8 @@
       //if not, create a new user
       if (ers.getInt(1) == 0) {
 
-        String insertUsers = "INSERT INTO User VALUES (uuid = ?, username = ?, email_address = ?, push = ?);";
-        String insertAuth = "INSERT INTO Authentication VALUES (uuid = ?, salt = ?, pass_hash = ?);";
+        String insertUsers = "INSERT INTO User (uuid, username, email_address, push) VALUES (?, ?, ?, ?)";
+        String insertAuth = "INSERT INTO Authentication (uuid, salt, pass_hash) VALUES (?, ?, ?)";
 
         PreparedStatement ups = con.prepareStatement(insertUsers);
         PreparedStatement aps = con.prepareStatement(insertAuth);
@@ -74,7 +73,7 @@
 
       } else {
 
-        out.print("Account with that email already exists!");
+        out.print("An account with that email already exists!");
 
       }
       con.close();
