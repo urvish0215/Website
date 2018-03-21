@@ -43,7 +43,10 @@
       
       con.close();
       
-    } catch (Exception e) { }
+    } catch (Exception e) {
+    	System.out.println(e);
+    	out.print("OOps, error occured on the server-side. Please try again.");
+    }
   %>
 
 </body>
