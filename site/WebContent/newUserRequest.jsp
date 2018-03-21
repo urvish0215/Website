@@ -38,9 +38,10 @@
       
 
       //check if a user already exists with the given email
-      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ?";
+      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ? OR username = ?";
       PreparedStatement eps = con.prepareStatement(checkEmailExists);
       eps.setString(1, email);
+      eps.setString(2, username);
       ResultSet ers = eps.executeQuery();
       
       ers.first();
@@ -83,7 +84,7 @@
 
       } else if (ers.getInt(1) == 1){
 
-        out.print("An account with that email already exists!");
+        out.print("An account with that email or username already exists!");
 
       } else if (nrs.getInt(1) == 1) {
     	  out.print("That username is taken");
