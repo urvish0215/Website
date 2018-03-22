@@ -47,7 +47,7 @@
       
       //check if a user already exists with the given username
       String checkNameExists = "SELECT COUNT(*) FROM User WHERE username = ?";
-      PreparedStatement nps = con.prepareStatement(checkEmailExists);
+      PreparedStatement nps = con.prepareStatement(checkNameExists);
       nps.setString(1, username);
       ResultSet nrs = nps.executeQuery();
       
@@ -90,14 +90,15 @@
       }
       con.close();
       if (success) {
-          response.setHeader("Refresh", "3;url=login.jsp");
+          response.setHeader("Refresh", "7;url=login.jsp");
       } else {
-          response.setHeader("Refresh", "3;url=signup.jsp"); 
+          response.setHeader("Refresh", "7;url=signup.jsp"); 
       }
-    } catch (Exception e) {
-    	out.print("An error has occured. Please try again.");
+    } 
+  	catch (Exception e) {
     	System.out.println(e);
-        response.setHeader("Refresh", "3;url=signup.jsp");
+    	out.print("An error has occured. Please try again.");
+        response.setHeader("Refresh", "7;url=signup.jsp");
     }
   %>
 
