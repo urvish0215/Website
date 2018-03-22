@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*,java.nio.*,java.security.*,java.nio.charset.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*,java.nio.*,java.security.*,java.nio.charset.*,javax.xml.bind.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -30,7 +30,7 @@
     	  String salt = hashrs.getString(1);
           MessageDigest digest = MessageDigest.getInstance("SHA-256");
           byte[] hash = digest.digest((rawpass.concat(salt)).getBytes(StandardCharsets.UTF_8));
-          String encoded = Base64.getEncoder().encodeToString(hash);
+          String encoded = DatatypeConverter.printBase64Binary(hash);
           String storedHash = hashrs.getString(2);
           if (encoded.equals(storedHash)) {
         	  out.print("Logged in successfully.");

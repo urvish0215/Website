@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*,java.nio.*,java.security.*,java.nio.charset.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*,java.nio.*,java.security.*,java.nio.charset.*,javax.xml.bind.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -34,14 +34,13 @@
       //hash the password+salt; in this case just sha-256 so as to not need an external library
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest((rawpass.concat(salt)).getBytes(StandardCharsets.UTF_8));
-      String encoded = Base64.getEncoder().encodeToString(hash);
+      String encoded = DatatypeConverter.printBase64Binary(hash);
       
 
       //check if a user already exists with the given email
-      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ? OR username = ?";
+      String checkEmailExists = "SELECT COUNT(*) FROM User WHERE email_address = ?";
       PreparedStatement eps = con.prepareStatement(checkEmailExists);
       eps.setString(1, email);
-      eps.setString(2, username);
       ResultSet ers = eps.executeQuery();
       
       ers.first();
@@ -97,6 +96,7 @@
       }
     } catch (Exception e) {
     	out.print("An error has occured. Please try again.");
+    	System.out.println(e);
         response.setHeader("Refresh", "3;url=signup.jsp");
     }
   %>
