@@ -18,6 +18,7 @@
       Boolean success = false;
 
       //get form data, salt, and uuid
+      String name = request.getParameter("name");
       String username = request.getParameter("username");
       String email = request.getParameter("email");
       String rawpass = request.getParameter("password");
@@ -57,7 +58,7 @@
       //if not, create a new user
       if (ers.getInt(1) == 0 && nrs.getInt(1) == 0) {
 
-        String insertUsers = "INSERT INTO User (uuid, username, email_address, push) VALUES (?, ?, ?, ?)";
+        String insertUsers = "INSERT INTO User (uuid, name, username, email_address, push) VALUES (?, ?, ?, ?, ?)";
         String insertAuth = "INSERT INTO Authentication (uuid, salt, pass_hash) VALUES (?, ?, ?)";
 
         PreparedStatement ups = con.prepareStatement(insertUsers);
